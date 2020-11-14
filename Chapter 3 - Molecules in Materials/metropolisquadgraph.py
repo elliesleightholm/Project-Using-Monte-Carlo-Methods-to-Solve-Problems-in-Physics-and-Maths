@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 
 # any variables defined here will be "global"
 #(i.e. can be accessed or changed in a function)
-SPRINGCONST = 1.0
+SPRINGCONST = 1
 KT=1.0
-XSTEP = 0.5
+XSTEP = 1
 
 NTIMES = 10000
 
@@ -28,12 +28,12 @@ for i in range(NBINS):
 COUNT = [0 for j in range(NBINS)]
 
 # this is the main program
+positions_of_particle = []
 def main():
     # initial position and energy of the particle
     x=0.0
     enold=u_pot(x)
     ennew=enold
-
 
     # main loop
     for i in range(NTIMES):
@@ -54,6 +54,7 @@ def main():
                 x = xnew
                 enold = ennew
         # work out which "bin" current position is in and add to bin
+        positions_of_particle.append(x)
         ibin = int((x - BINMIN)/BINSTEP)
         if ibin>=0 and ibin<NBINS:
             COUNT[ibin] += 1
@@ -79,15 +80,13 @@ def u_pot(x):
 
 
 def cplot():
-    
     #plot the sampled distribution as a histogram
-    plt.bar(BINLEFT, COUNT, width=BINSTEP, color='g')
-    plt.xlabel('x',fontsize=20)
-    plt.ylabel('Probability',fontsize=20)
-    plt.title('Metropolis Monte Carlo sampling, quadratic potential',fontsize=20)
-    
-    
-    #plot the expected distribution as a line 
+    plt.bar(BINLEFT, COUNT, width=BINSTEP, color='b')
+    plt.xlabel('x',fontsize=18)
+    plt.ylabel('Probability',fontsize=18)
+    plt.suptitle('Metropolis Monte Carlo sampling, quadratic potential',fontsize=18)
+    plt.title('N = %s and Step %s'%(NTIMES,XSTEP))
+    # plot the expected distribution as a line
     ydat=[]
     norm=math.sqrt(2*math.pi/SPRINGCONST)
     for i in range(NBINS):
@@ -100,4 +99,4 @@ def cplot():
 # here we run the main function
 main()
 cplot()
-
+print(positions_of_particle)
